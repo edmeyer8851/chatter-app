@@ -1,4 +1,4 @@
-.formContainer {
+.signInFormContainer {
     display: flex;
     flex-direction: column;
     width: 700px;
@@ -9,12 +9,12 @@
     align-items: center;
 }
 
-.formContainer > h3 {
+.signInFormContainer > h3 {
     color: white;
     font-size: 25px;
 }
 
-.formContainer > p {
+.signInFormContainer > p {
     color: rgb(172, 169, 169);
 }
 

@@ -29,7 +29,7 @@ function SignInForm() {
     }
 
     return (
-        <div className="formContainer">
+        <div className="signInFormContainer">
             <h3>Welcome back!</h3>
             <p>We're so excited to see you again!</p>
             <div className="inputContainer">

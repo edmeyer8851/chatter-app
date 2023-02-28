@@ -35,6 +35,7 @@ function SignUpForm() {
     return (
         <div className="formContainer">
             <h3>Create an account</h3>
+            <p>It's easy, we promise.</p>
             <div className="inputContainer">
                 <form onSubmit={handleSubmit}>
                     <p>EMAIL</p>

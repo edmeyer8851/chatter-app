@@ -1,0 +1,9 @@
+.signInPage {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    background-image: url(../../../public/signInBackgroundImage.jpg);
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}

@@ -1,0 +1,27 @@
+.serverList {
+    display: flex;
+    flex-direction: column;
+    flex: 0.1;
+    max-width: 75px;
+    background-color: rgb(38, 38, 38);
+    height: 100vh;
+    align-items: center;
+    padding-top: 5px;
+}
+
+.serverList > .MuiAvatar-root {
+    margin-top: 10px;
+}
+
+.serverList > .MuiAvatar-root:hover {
+    cursor: pointer;
+}
+
+.addServerIcon {
+    color: #4fb185;
+}
+
+.addServerIcon:hover{
+    color: #77cfa7;
+    cursor: pointer;
+}

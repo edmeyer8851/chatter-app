@@ -1,0 +1,85 @@
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    width: 700px;
+    height: 600px;
+    background-color: #303338;
+    border-radius: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.formContainer > h3 {
+    color: white;
+    font-size: 25px;
+}
+
+.formContainer > p {
+    color: rgb(172, 169, 169);
+}
+
+form { 
+    position: relative;
+    margin-top: 15px;
+    margin-left: -30px;
+    margin-bottom: 10px;
+}
+
+.inputContainer > form {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+}
+
+.inputContainer > p {
+    color:rgb(172, 169, 169)
+}
+
+p > button {
+    background: none!important;
+  border: none;
+  /*optional*/
+  font-family: arial, sans-serif;
+  /*input has OS specific font-family*/
+  color: rgb(26, 162, 230);
+  text-decoration: underline;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+form > input {
+    background-color: #1a1b1d;
+    outline-style: solid;
+    outline-width: 0;
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    caret-color: white;
+    color: rgb(172, 169, 169);
+    font-size: 17px;
+}
+
+form > p {
+    color: rgb(203, 201, 201);
+    padding: 5px;
+    font-weight: bold;
+}
+
+.logInButton {
+    margin-top: 25px;
+    background-color: rgb(0, 143, 143);
+    height: 45px;
+    width: 375px;
+    outline-style: solid;
+    outline-width: 0;
+    border: none;
+    border-radius: 5px;
+    color: rgb(233, 233, 233);
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.logInButton:hover {
+    background-color: rgb(7, 161, 161);
+    cursor: pointer;
+}

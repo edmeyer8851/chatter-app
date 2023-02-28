@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import './styles/sidebar.css'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import SidebarChannel from './SidebarChannel';
 import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
@@ -10,14 +11,32 @@ import { Avatar } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HeadsetIcon from '@mui/icons-material/Headset';
+import { UserContext } from '../context/user';
 
 
-function Sidebar() {
+function Sidebar({ serversToDisplay, setServersToDisplay, currentServer, setCurrentServer, channelsToDisplay, setChannelsToDisplay }) {
+    
+    const [user, setUser] = useContext(UserContext)
+
+    useEffect(() => {
+        if (user) {setCurrentServer(serversToDisplay[0])}
+    }, [])
+
+    const deleteServer = () => {
+        fetch(`servers/${currentServer.id}`, {
+            method: 'DELETE'
+        }).then(() => {
+            setServersToDisplay(serversToDisplay.filter(server => server.id != currentServer.id))
+        }).then(() => {
+            setCurrentServer(serversToDisplay[0])
+        })
+    }
+    
     return (
         <div className = "sidebar">            
             <div className="sidebar__top">
-                <h3>Server Name</h3>
-                <ExpandMoreIcon />
+                {currentServer && <><h3>{currentServer.name}</h3>
+                <DeleteIcon className="icon" onClick={deleteServer}/></>}
             </div>
 
             <div className="sidebar__channels">
@@ -26,7 +45,6 @@ function Sidebar() {
                         <ExpandMoreIcon />
                         <h4>Text Channels</h4>
                     </div>
-
                     <AddIcon className="sidebar__addChannel"/>
                 </div>
 

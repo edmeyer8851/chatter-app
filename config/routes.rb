@@ -10,5 +10,6 @@ Rails.application.routes.draw do
   get '/me', to: 'users#show'
   post '/signup', to: 'users#create'
   delete 'logout', to: 'sessions#destroy'
+  get '/servers_by_user', to: 'servers#get_servers_by_user'
 
 end

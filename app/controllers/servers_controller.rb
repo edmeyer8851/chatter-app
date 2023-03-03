@@ -1,5 +1,11 @@
 class ServersController < ApplicationController
 
+    before_action :get_user, only: [:index]
+
+    def index
+        render json: @user.servers, status: :ok
+    end
+    
     def show
         server = Server.find(params[:id])
         render json: server
@@ -16,18 +22,13 @@ class ServersController < ApplicationController
         head :no_content
     end
 
-    def get_servers_by_user
-        user_servers = UserServer.where(user_id: session[:user_id])
-        servers = []
-        user_servers.each do |user_server|
-            servers << user_server.server
-        end
-        render json: servers, status: :ok
-        
-    end
-
     private
     def server_params
         params.permit(:name)
     end
+
+    def get_user
+        @user = User.find(params[:user_id])
+    end
+
 end

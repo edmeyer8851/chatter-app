@@ -5,19 +5,25 @@ import ControlPointRoundedIcon from '@mui/icons-material/ControlPointRounded';
 import { UserContext } from '../context/user';
 import Overlay from './Overlay';
 
-function ServerList({ serversToDisplay, setServersToDisplay, currentServer, setCurrentServer }) {
+function ServerList() {
     
-    const [user, setUser] = useContext(UserContext)
+    const [user, setUser, 
+        serversToDisplay, setServersToDisplay,
+        currentServer, setCurrentServer,
+        channelsToDisplay, setChannelsToDisplay,
+        currentChannel, setCurrentChannel] = useContext(UserContext)
 
     const [isOpen, setIsOpen] = useState(false)
     const [serverFormName, setServerFormName] = useState("")
     const [errors, setErrors] = useState([]);
 
     useEffect(() => {
-        fetch('/servers_by_user')
+        if (user) {
+            fetch(`/users/${user.id}/servers`)
         .then(r => r.json())
         .then(setServersToDisplay)
-    },[])
+        }
+    },[user])
 
 
     const toggleOverlay = () => {
@@ -68,16 +74,12 @@ function ServerList({ serversToDisplay, setServersToDisplay, currentServer, setC
             {serversToDisplay && serversToDisplay.map(server => (
                 <Avatar key={server.id} id={server.id} sx={{height: '60px', width: '60px'}} onClick={handleServerClick}>{server.name[0]}</Avatar>
             ))}
-            {/* <Avatar sx={{height: '60px', width: '60px'}}>M</Avatar>
-            <Avatar sx={{height: '60px', width: '60px'}}>M</Avatar>
-            <Avatar sx={{height: '60px', width: '60px'}}>M</Avatar>
-            <Avatar sx={{height: '60px', width: '60px'}}>M</Avatar> */}
             <ControlPointRoundedIcon onClick={toggleOverlay} sx={{marginTop: "5px", height: '60px', width: '60px'}} className='addServerIcon'/>
             <Overlay isOpen={isOpen} onClose={toggleOverlay}>
                 <h3>Add a new server</h3>
                 <form className='addServerForm' onSubmit={handleAddServer}>
                     <p>Server Name</p>
-                    <input id='name' value={serverFormName} autoComplete='off' onChange={e => setServerFormName(e.target.value)}></input>
+                    <input id='name' value={serverFormName} autoFocus autoComplete='off' onChange={e => setServerFormName(e.target.value)}></input>
                     <button type='submit'>Add Server</button>
                 </form>
             </Overlay>

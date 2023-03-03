@@ -5,14 +5,6 @@ class UsersController < ApplicationController
         render json: users, status: :ok
     end
     
-    def create
-        user = User.create!(user_params)
-        session[:user_id] = user.id
-        render json: user, status: :created
-        rescue ActiveRecord::RecordInvalid => invalid
-            render json: { errors: invalid.record.errors.full_messages }, status: :unprocessable_entity
-    end
-
     def show
         user = find_user
         if user
@@ -20,6 +12,14 @@ class UsersController < ApplicationController
         else
             render json: { error: "User not logged in" }, status: :unauthorized
         end
+    end
+    
+    def create
+        user = User.create!(user_params)
+        session[:user_id] = user.id
+        render json: user, status: :created
+        rescue ActiveRecord::RecordInvalid => invalid
+            render json: { errors: invalid.record.errors.full_messages }, status: :unprocessable_entity
     end
 
     def update

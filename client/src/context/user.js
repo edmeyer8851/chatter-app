@@ -6,7 +6,16 @@ const UserProvider = ({ children }) => {
 
 
     const [user, setUser] = useState(null)
-    const value = [user, setUser]
+    const [serversToDisplay, setServersToDisplay] = useState([])
+    const [currentServer, setCurrentServer] = useState()
+    const [channelsToDisplay, setChannelsToDisplay] = useState([])
+    const [currentChannel, setCurrentChannel] = useState()
+    const value = [user, setUser, 
+      serversToDisplay, setServersToDisplay,
+      currentServer, setCurrentServer,
+      channelsToDisplay, setChannelsToDisplay,
+      currentChannel, setCurrentChannel
+    ]
 
     useEffect(() => {
         fetch("/me").then((r) => {

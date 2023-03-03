@@ -1,10 +1,11 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './styles/sidebar.css'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import SidebarChannel from './SidebarChannel';
 import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
+import ControlPointRoundedIcon from '@mui/icons-material/ControlPointRounded';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import CallIcon from '@mui/icons-material/Call';
 import { Avatar } from '@mui/material';
@@ -12,15 +13,31 @@ import MicIcon from '@mui/icons-material/Mic';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HeadsetIcon from '@mui/icons-material/Headset';
 import { UserContext } from '../context/user';
+import Overlay from './Overlay';
 
 
-function Sidebar({ serversToDisplay, setServersToDisplay, currentServer, setCurrentServer, channelsToDisplay, setChannelsToDisplay }) {
+function Sidebar() {
     
-    const [user, setUser] = useContext(UserContext)
+    const [user, setUser, 
+        serversToDisplay, setServersToDisplay,
+        currentServer, setCurrentServer,
+        channelsToDisplay, setChannelsToDisplay,
+        currentChannel, setCurrentChannel] = useContext(UserContext)
 
-    useEffect(() => {
-        if (user) {setCurrentServer(serversToDisplay[0])}
-    }, [])
+    const [isOpen, setIsOpen] = useState(false)
+    const [channelFormName, setChannelFormName] = useState("")
+
+    useEffect(() => {        
+        if (currentServer) {
+            fetch(`/servers/${currentServer.id}/channels`)
+        .then(r => r.json())
+        .then(setChannelsToDisplay)
+        }
+    }, [currentServer])
+
+    const toggleOverlay = () => {
+        setIsOpen(!isOpen);
+    };
 
     const deleteServer = () => {
         fetch(`servers/${currentServer.id}`, {
@@ -28,13 +45,40 @@ function Sidebar({ serversToDisplay, setServersToDisplay, currentServer, setCurr
         }).then(() => {
             setServersToDisplay(serversToDisplay.filter(server => server.id != currentServer.id))
         }).then(() => {
-            setCurrentServer(serversToDisplay[0])
+            if (serversToDisplay.length <= 1) {
+                setCurrentServer(undefined)
+            } else setCurrentServer(serversToDisplay[0])
         })
+    }
+
+    const handleAddChannel = (e) => {
+        e.preventDefault()
+        
+        fetch('/channels', {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name: channelFormName, server_id: currentServer.id })
+        })
+        .then(r => r.json())
+        .then(channel => {
+            if (channelsToDisplay.length > 0) {
+                setChannelsToDisplay([...channelsToDisplay, channel])
+            } else {setChannelsToDisplay([channel])}
+            setCurrentChannel(channel)
+        }).then(toggleOverlay).then(setChannelFormName(""))
     }
     
     return (
-        <div className = "sidebar">            
-            <div className="sidebar__top">
+        <div className = "sidebar">  
+            {!currentServer && <div className="sidebar__top">
+                <h3 className="instructions">
+                    {serversToDisplay.length > 0 ? "Select a server on the left to view channels and messages" 
+                    : "To get started, create a new server by clicking the green plus to the left"}
+                </h3>
+            </div>}          
+            {currentServer && <><div className="sidebar__top">
                 {currentServer && <><h3>{currentServer.name}</h3>
                 <DeleteIcon className="icon" onClick={deleteServer}/></>}
             </div>
@@ -45,16 +89,24 @@ function Sidebar({ serversToDisplay, setServersToDisplay, currentServer, setCurr
                         <ExpandMoreIcon />
                         <h4>Text Channels</h4>
                     </div>
-                    <AddIcon className="sidebar__addChannel"/>
+                    <AddIcon className="sidebar__addChannel" onClick={toggleOverlay}/>
+                    <Overlay isOpen={isOpen} onClose={toggleOverlay}>
+                        <h3>Add a new channel</h3>
+                        <form className='addChannelForm' onSubmit={handleAddChannel}>
+                            <p>Channel Name</p>
+                            <input id='name' value={channelFormName} autoFocus autoComplete='off' onChange={e => setChannelFormName(e.target.value)}></input>
+                            <button type='submit'>Add Channel</button>
+                        </form>
+                    </Overlay>
                 </div>
 
                 <div className="sidebar__channelsList">
-                    <SidebarChannel />
-                    <SidebarChannel />
-                    <SidebarChannel />
+                    {channelsToDisplay.length > 0 && channelsToDisplay.map(channel => (
+                        <SidebarChannel key={channel.id} channel={channel}/>
+                    ))}
                 </div>
-            </div>
-            <div className="sidebar__voice">
+            </div></>}
+            {/* <div className="sidebar__voice">
                 <SignalCellularAltIcon 
                     className='sidebar__voiceIcon'
                     fontSize='medium'
@@ -67,13 +119,13 @@ function Sidebar({ serversToDisplay, setServersToDisplay, currentServer, setCurr
                     <InfoOutlinedIcon className='icon'/>
                     <CallIcon className='icon'/>
                 </div>
-            </div>
+            </div> */}
             <div className="sidebar__profile">
                 <Avatar />
-                <div className="sidebar__profileInfo">
-                    <h3>@eddiemeyer</h3>
-                    <p>#user_id</p>
-                </div>
+                {user && <div className="sidebar__profileInfo">
+                    <h3>@{user.username}</h3>
+                    <p>#821{user.id}</p>
+                </div>}
                 <div className="sidebar__profileIcons">
                     <MicIcon className='icon'/>
                     <HeadsetIcon className='icon'/>

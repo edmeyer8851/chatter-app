@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { UserContext } from '../context/user'
 import Chat from './Chat'
 import ServerList from './ServerList'
 import Sidebar from './Sidebar'
 
 function Home() {
     
-    const [serversToDisplay, setServersToDisplay] = useState([])
-    const [currentServer, setCurrentServer] = useState()
-    const [channelsToDisplay, setChannelsToDisplay] = useState([])
+    const [user, setUser, 
+        serversToDisplay, setServersToDisplay,
+        currentServer, setCurrentServer,
+        channelsToDisplay, setChannelsToDisplay,
+        currentChannel, setCurrentChannel] = useContext(UserContext)
 
     useEffect(() => {
         if (currentServer) {
@@ -17,20 +20,8 @@ function Home() {
 
     return (
         <>
-            <ServerList 
-                serversToDisplay={serversToDisplay}
-                setServersToDisplay={setServersToDisplay}
-                currentServer={currentServer} 
-                setCurrentServer={setCurrentServer}
-            />
-            <Sidebar 
-                serversToDisplay={serversToDisplay}
-                setServersToDisplay={setServersToDisplay}
-                currentServer={currentServer} 
-                setCurrentServer={setCurrentServer} 
-                channelsToDisplay={channelsToDisplay}
-                setChannelsToDisplay={setChannelsToDisplay}
-            />
+            <ServerList />
+            <Sidebar />
             <Chat />
         </>
     )

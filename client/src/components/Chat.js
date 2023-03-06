@@ -26,7 +26,9 @@ function Chat({ws, messages, setMessages}) {
         if (data.type ==="welcome") return
         if (data.type === "confirm_subscription") return
         const message = data.message
-        setMessages(messages => [...messages, message])
+        if (data.message.channel_id === currentChannel.id){
+            setMessages(messages => [...messages, message])
+        }
     }
     
     useEffect(() => {

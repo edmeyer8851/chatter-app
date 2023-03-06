@@ -4,10 +4,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import SidebarChannel from './SidebarChannel';
-import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
-import ControlPointRoundedIcon from '@mui/icons-material/ControlPointRounded';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import CallIcon from '@mui/icons-material/Call';
 import { Avatar } from '@mui/material';
 import MicIcon from '@mui/icons-material/Mic';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -31,9 +27,18 @@ function Sidebar() {
         if (currentServer) {
             fetch(`/servers/${currentServer.id}/channels`)
         .then(r => r.json())
-        .then(setChannelsToDisplay)
+        .then(channels => {
+            setChannelsToDisplay(channels)
+            setCurrentChannel(channels[0])
+        })
         }
     }, [currentServer])
+
+    useEffect(() => {
+        if (user.servers) {
+            setCurrentServer(user.servers[0])
+        }
+    }, [])
 
     const toggleOverlay = () => {
         setIsOpen(!isOpen);

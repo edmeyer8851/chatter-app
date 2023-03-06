@@ -4,13 +4,15 @@ import Chat from './Chat'
 import ServerList from './ServerList'
 import Sidebar from './Sidebar'
 
-function Home() {
+function Home({ws}) {
     
     const [user, setUser, 
         serversToDisplay, setServersToDisplay,
         currentServer, setCurrentServer,
         channelsToDisplay, setChannelsToDisplay,
         currentChannel, setCurrentChannel] = useContext(UserContext)
+
+    const [messages, setMessages] = useState([]) 
 
     useEffect(() => {
         if (currentServer) {
@@ -20,9 +22,9 @@ function Home() {
 
     return (
         <>
-            <ServerList />
+            {user && <> <ServerList setMessages={setMessages}/>
             <Sidebar />
-            <Chat />
+            <Chat ws={ws} messages={messages} setMessages={setMessages}/></>}
         </>
     )
 }

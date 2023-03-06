@@ -13,14 +13,18 @@ function ChatHeader() {
 
     let navigate = useNavigate()
 
-    const [user, setUser] = useContext(UserContext)  
+    const [user, setUser, 
+        serversToDisplay, setServersToDisplay,
+        currentServer, setCurrentServer,
+        channelsToDisplay, setChannelsToDisplay,
+        currentChannel, setCurrentChannel] = useContext(UserContext) 
 
     const handleLogout = () => {
         fetch("/logout", { method: "DELETE" }).then((r) => {
             if (r.ok) { 
               setUser(null);
             }
-          }).then(navigate('/'));
+          }).then(navigate('/'))
     }
     
     return (
@@ -28,7 +32,7 @@ function ChatHeader() {
             <div className="chatHeader__left">
                 <h3>
                     <span className='chatHeader__hash'>#</span>
-                    Channel Name
+                    {currentChannel ? `${currentChannel.name}` : "Select a channel"}
                 </h3>
             </div>
             <div className="chatHeader__right">

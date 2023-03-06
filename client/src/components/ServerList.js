@@ -5,7 +5,7 @@ import ControlPointRoundedIcon from '@mui/icons-material/ControlPointRounded';
 import { UserContext } from '../context/user';
 import Overlay from './Overlay';
 
-function ServerList() {
+function ServerList({setMessages}) {
     
     const [user, setUser, 
         serversToDisplay, setServersToDisplay,
@@ -34,6 +34,7 @@ function ServerList() {
         fetch(`servers/${e.target.id}`)
         .then(r => r.json())
         .then(server => {
+            setMessages([])
             setCurrentServer(server)
             setCurrentChannel(server.channels[0])
         })
@@ -64,7 +65,7 @@ function ServerList() {
                         } else {setServersToDisplay([newServer.server])}
                         setCurrentServer(newServer.server)
                     })
-                    .then(toggleOverlay).then(setServerFormName(""))
+                    .then(toggleOverlay).then(setServerFormName("")).then(setMessages([]))
                 })
             } else {
                 r.json().then(errors => setErrors(errors))

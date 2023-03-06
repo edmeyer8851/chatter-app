@@ -33,12 +33,15 @@ function ServerList() {
     const handleServerClick = (e) => {
         fetch(`servers/${e.target.id}`)
         .then(r => r.json())
-        .then(setCurrentServer)
+        .then(server => {
+            setCurrentServer(server)
+            setCurrentChannel(server.channels[0])
+        })
     }
 
     const handleAddServer = (e) => {
         e.preventDefault()
-        
+        setCurrentChannel(undefined)
         fetch('/servers', {
             method: 'POST',
             headers: {

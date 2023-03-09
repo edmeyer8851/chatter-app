@@ -92,18 +92,13 @@ function Chat({ws, messages, setMessages}) {
             </div>
 
             {currentChannel && <div className="chat__input">
-                <AddCircleIcon className='icon' fontSize='large'/>
+                {/* <AddCircleIcon className='icon' fontSize='large'/> */}
                 <form onSubmit={handleSubmit} >
-                    <input placeholder='Message #Channel Name' value={formContent} onChange={(e) => setFormContent(e.target.value)} ></input>
+                    <input placeholder={`Message #${currentChannel.name}`} value={formContent} onChange={(e) => setFormContent(e.target.value)} ></input>
                     <button className='chat__inputButton' type='submit'>
                         Send Message
                     </button>
                 </form>
-                <div className="chat__inputIcons">
-                    <CardGiftcardIcon className='icon'/>
-                    <GifIcon className='icon'/>
-                    <EmojiEmotionsIcon className='icon'/>
-                </div>
             </div>}
         </div>
     )

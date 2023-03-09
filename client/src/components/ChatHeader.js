@@ -36,15 +36,15 @@ function ChatHeader({ searchTerm, setSearchTerm}) {
                 </h3>
             </div>
             <div className="chatHeader__right">
-                <NotificationsIcon className='icon'/>
+                {/* <NotificationsIcon className='icon'/>
                 <EditLocationRoundedIcon className='icon'/>
-                <PeopleAltRoundedIcon className='icon'/>
+                <PeopleAltRoundedIcon className='icon'/> */}
 
                 <form className="chatHeader__search">
                     <input placeholder='Search' value={searchTerm} onChange={e => setSearchTerm(e.target.value)}/>
                     <SearchRoundedIcon className='icon' />
                 </form>
-                <SendRoundedIcon className='icon' />
+                {/* <SendRoundedIcon className='icon' /> */}
                 <LogoutIcon className='lastIcon' onClick={handleLogout} />
             </div>
         </div>

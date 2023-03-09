@@ -9,7 +9,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { UserContext } from '../context/user';
 import { useNavigate } from 'react-router-dom';
 
-function ChatHeader() {
+function ChatHeader({ searchTerm, setSearchTerm}) {
 
     let navigate = useNavigate()
 
@@ -41,7 +41,7 @@ function ChatHeader() {
                 <PeopleAltRoundedIcon className='icon'/>
 
                 <form className="chatHeader__search">
-                    <input placeholder='Search' />
+                    <input placeholder='Search' value={searchTerm} onChange={e => setSearchTerm(e.target.value)}/>
                     <SearchRoundedIcon className='icon' />
                 </form>
                 <SendRoundedIcon className='icon' />

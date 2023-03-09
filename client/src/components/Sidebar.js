@@ -10,6 +10,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import HeadsetIcon from '@mui/icons-material/Headset';
 import { UserContext } from '../context/user';
 import Overlay from './Overlay';
+import Error from './styles/Error'
 
 
 function Sidebar() {
@@ -22,6 +23,7 @@ function Sidebar() {
 
     const [isOpen, setIsOpen] = useState(false)
     const [channelFormName, setChannelFormName] = useState("")
+    const [errors, setErrors] = useState([])
 
     useEffect(() => {        
         if (currentServer) {
@@ -42,6 +44,7 @@ function Sidebar() {
 
     const toggleOverlay = () => {
         setIsOpen(!isOpen);
+        setErrors([])
     };
 
     const deleteServer = () => {
@@ -65,14 +68,21 @@ function Sidebar() {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ name: channelFormName, server_id: currentServer.id })
-        })
-        .then(r => r.json())
-        .then(channel => {
-            if (channelsToDisplay.length > 0) {
-                setChannelsToDisplay([...channelsToDisplay, channel])
-            } else {setChannelsToDisplay([channel])}
-            setCurrentChannel(channel)
-        }).then(toggleOverlay).then(setChannelFormName(""))
+        }).then(r => {
+            if (r.ok){
+                r.json()
+                .then(channel => {
+                    if (channelsToDisplay.length > 0) {
+                        setChannelsToDisplay([...channelsToDisplay, channel])
+                    } else {setChannelsToDisplay([channel])}
+                    setCurrentChannel(channel)
+                }).then(toggleOverlay).then(setChannelFormName(""))
+            } else {
+                r.json()
+                .then(err => setErrors(err.errors))
+            }
+    })
+        
     }
     
     return (
@@ -102,6 +112,11 @@ function Sidebar() {
                             <input id='name' value={channelFormName} autoFocus autoComplete='off' onChange={e => setChannelFormName(e.target.value)}></input>
                             <button type='submit'>Add Channel</button>
                         </form>
+                        <div>
+                            {errors.map(err => (
+                                <Error key={err}>{err}</Error>
+                            ))}
+                        </div>
                     </Overlay>
                 </div>
 

@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../context/user'
 import './styles/signUpForm.css'
-
+import Error from './styles/Error'
 
 function SignUpForm() {
 
@@ -28,6 +28,8 @@ function SignUpForm() {
                 r.json().then(user => {
                     setUser(user)
                 }).then(navigate('/home'))
+            } else {
+                r.json().then(err => setErrors(err.errors))
             }
         })
     }
@@ -49,6 +51,11 @@ function SignUpForm() {
                     <button className='logInButton' type='submit'>Register</button>
                 </form>
                 <p>Already have an account?<button onClick={() => navigate('/')}>Sign in</button></p>
+                <div>
+                    {errors.map(err => (
+                        <Error>{err}</Error>
+                    ))}
+                </div>
             </div>
         </div>
     )

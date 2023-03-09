@@ -20,6 +20,8 @@ function Chat({ws, messages, setMessages}) {
         channelsToDisplay, setChannelsToDisplay,
         currentChannel, setCurrentChannel] = useContext(UserContext) 
 
+    const [searchTerm, setSearchTerm] = useState('')
+
     ws.onmessage = e => {
         const data = JSON.parse(e.data)
         if (data.type === "ping") return
@@ -32,10 +34,10 @@ function Chat({ws, messages, setMessages}) {
     }
     
     useEffect(() => {
-        if (currentChannel) {
+        if (currentChannel && searchTerm === "") {
             fetchMessages()
         }
-    }, [currentChannel])
+    }, [currentChannel, searchTerm])
 
     useEffect(() => {
         bottomRef.current?.scrollIntoView({behavior: 'smooth'});
@@ -65,10 +67,22 @@ function Chat({ws, messages, setMessages}) {
         })
         setFormContent('')
     }
+
+
+    useEffect(() => {
+        if (searchTerm !== ""){
+            let filteredMessages = messages.filter(message => {
+                return message.content.toLowerCase().includes(searchTerm.toLowerCase())
+            })  
+            setMessages(filteredMessages)
+        }
+    }, [searchTerm])
+
+    console.log(searchTerm)
     
     return (
         <div className="chat">
-            <ChatHeader />
+            <ChatHeader searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
 
             <div className="chat__messages">
                 {messages.map(message => (

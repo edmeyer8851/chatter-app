@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { UserContext } from '../context/user'
 import './styles/signInForm.css'
+import Error from './styles/Error'
 
 function SignInForm() {
 
@@ -10,6 +11,7 @@ function SignInForm() {
 
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
+    const [errors, setErrors] = useState([])
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -24,6 +26,8 @@ function SignInForm() {
                 r.json().then(user => {
                     setUser(user)
                 }).then(navigate('/home'))
+            } else {
+                r.json().then(err => setErrors([err.errors]))
             }
         })
     }
@@ -41,6 +45,11 @@ function SignInForm() {
                     <button className='logInButton' type='submit'>Log In</button>
                 </form>
                 <p>Need an account?<button onClick={() => navigate('/register')}>Register</button></p>
+                <div>
+                    {errors.map((err) => (
+                        <Error>{err.errors[0]}</Error>
+                    ))}
+                </div>
             </div>
         </div>
     )

@@ -6,8 +6,11 @@ class MessagesController < ApplicationController
     end
     
     def create
-        msg = Message.create(message_params)
+        msg = Message.create!(message_params)
         render json: msg, status: :created
+        rescue ActiveRecord::RecordInvalid => invalid
+            errors_arr = invalid.record.errors.map{|key,value| "#{key}: #{value}"}
+            render json: { errors: errors_arr }, status: :unprocessable_entity
     end
 
     private

@@ -8,18 +8,28 @@ class ServersController < ApplicationController
     
     def show
         server = Server.find(params[:id])
-        render json: server
+        if server
+            render json: server
+        else
+            render json: { error: "Server not found"}, status: :not_found
+        end
     end
     
     def create
-        server = Server.create(server_params)
+        server = Server.create!(server_params)
         render json: server, status: :created
+        rescue ActiveRecord::RecordInvalid => invalid
+            render json: { errors: invalid.record.errors.full_messages }, status: :unprocessable_entity
     end
 
     def destroy
         server = Server.find(params[:id])
-        server.destroy
-        head :no_content
+        if server
+            server.destroy
+            head :no_content
+        else
+            render json: { error: "Server not found"}, status: :not_found
+        end
     end
 
     private

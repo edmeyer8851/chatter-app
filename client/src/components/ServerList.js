@@ -4,6 +4,8 @@ import './styles/serverList.css'
 import ControlPointRoundedIcon from '@mui/icons-material/ControlPointRounded';
 import { UserContext } from '../context/user';
 import Overlay from './Overlay';
+import Error from './styles/Error'
+
 
 function ServerList({setMessages}) {
     
@@ -28,6 +30,7 @@ function ServerList({setMessages}) {
 
     const toggleOverlay = () => {
         setIsOpen(!isOpen);
+        setErrors([])
     };
 
     const handleServerClick = (e) => {
@@ -68,7 +71,7 @@ function ServerList({setMessages}) {
                     .then(toggleOverlay).then(setServerFormName("")).then(setMessages([]))
                 })
             } else {
-                r.json().then(errors => setErrors(errors))
+                r.json().then(err => setErrors(err.errors))
             }
         })
     }
@@ -86,6 +89,11 @@ function ServerList({setMessages}) {
                     <input id='name' value={serverFormName} autoFocus autoComplete='off' onChange={e => setServerFormName(e.target.value)}></input>
                     <button type='submit'>Add Server</button>
                 </form>
+                <div>
+                    {errors.map(err => (
+                        <Error key={err}>{err}</Error>
+                    ))}
+                </div>
             </Overlay>
         </div>
     )

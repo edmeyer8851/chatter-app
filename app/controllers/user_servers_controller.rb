@@ -6,13 +6,19 @@ class UserServersController < ApplicationController
     end
     
     def create
-        user_server = UserServer.create(user_server_params)
+        user_server = UserServer.create!(user_server_params)
         render json: user_server, status: :created
+        rescue ActiveRecord::RecordInvalid => invalid
+            render json: { errors: invalid.record.errors.full_messages }, status: :unprocessable_entity
     end
 
     def destroy
         user_server = UserServer.find(params[:id])
-        user_server.delete
+        if user_server
+            user_server.delete
+        else
+            render json: { error: "Server not found"}, status: :not_found
+        end
         head :no_content
     end
 

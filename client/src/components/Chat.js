@@ -77,8 +77,6 @@ function Chat({ws, messages, setMessages}) {
             setMessages(filteredMessages)
         }
     }, [searchTerm])
-
-    console.log(searchTerm)
     
     return (
         <div className="chat">
